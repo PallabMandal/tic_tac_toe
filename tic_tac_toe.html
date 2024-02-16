@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe</title>
+  <style>
+    #tic-tac-toe-board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 5px;
+      margin: 0 auto;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      font-size: 24px;
+      text-align: center;
+      vertical-align: middle;
+      background-color: #eee;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic Tac Toe</h1>
+  <div id="tic-tac-toe-board">
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+    <div class="cell" onclick="makeMove(this)"></div>
+  </div>
+  <p id="winner-message"></p>
+
+  <script>
+    let currentPlayer = 'X';
+    let isGameActive = true;
+    const cells = document.querySelectorAll('.cell');
+    const winnerMessage = document.getElementById('winner-message');
+
+    function checkWinner() {
+      const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+
+      for (const combo of winningCombinations) {
+        const [a, b, c] = combo;
+        if (cells[a].textContent && cells[a].textContent === cells[b].textContent && cells[a].textContent === cells[c].textContent) {
+          cells[a].style.backgroundColor = 'green';
+          cells[b].style.backgroundColor = 'green';
+          cells[c].style.backgroundColor = 'green';
+          winnerMessage.textContent = `${currentPlayer} wins!`;
+          isGameActive = false;
+          return;
+        }
+      }
+
+      if ([...cells].every(cell => cell.textContent)) {
+        winnerMessage.textContent = "It's a draw!";
+        isGameActive = false;
+      }
+    }
+
+    function makeMove(cell) {
+      if (!isGameActive || cell.textContent) return;
+      cell.textContent = currentPlayer;
+      checkWinner();
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+  </script>
+</body>
+</html>
